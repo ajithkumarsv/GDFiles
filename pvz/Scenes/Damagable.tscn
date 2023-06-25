@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqjwgekw38d4q"]
+
+[ext_resource type="Script" path="res://Scripts/Bullet.cs" id="1_4wd0f"]
+[ext_resource type="Script" path="res://Scripts/ObjectCollider.cs" id="2_nompe"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_af47i"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mgmpn"]
+
+[node name="RigidBody3D" type="RigidBody3D"]
+mass = 5.0
+inertia = Vector3(0, 16.13, 0)
+gravity_scale = 9.8
+can_sleep = false
+script = ExtResource("1_4wd0f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_af47i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_mgmpn")
+script = ExtResource("2_nompe")

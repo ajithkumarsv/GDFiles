@@ -1,0 +1,103 @@
+[gd_scene load_steps=15 format=3 uid="uid://dr423nhk7q2nf"]
+
+[ext_resource type="Script" path="res://Scripts/Plant.cs" id="1_f6whm"]
+[ext_resource type="PackedScene" uid="uid://dqjwgekw38d4q" path="res://Scenes/Damagable.tscn" id="2_p5tbp"]
+[ext_resource type="Script" path="res://Scripts/Zombie.cs" id="3_bo8he"]
+[ext_resource type="PackedScene" uid="uid://byqsl37ghebjo" path="res://Scenes/pea.tscn" id="3_c74oe"]
+[ext_resource type="Script" path="res://Scenes/GridSystem.cs" id="5_cq0bd"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5n6pp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_thipe"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_176if"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_jyenb"]
+albedo_color = Color(0.627451, 0, 0.631373, 1)
+orm_texture = SubResource("ImageTexture_176if")
+
+[sub_resource type="BoxMesh" id="BoxMesh_vm6ed"]
+material = SubResource("ORMMaterial3D_jyenb")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nkr75"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dkdal"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0dc5h"]
+
+[sub_resource type="MeshLibrary" id="MeshLibrary_sq8cu"]
+
+[node name="Main" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, -3.38831e-07, 6.06601e-08, 6.06601e-08, 0.346935, 0.937889, -3.38831e-07, -0.937889, 0.346935, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94886, 0.315699, 0, -0.315699, 0.94886, 0, 1.99811, 6.80384)
+
+[node name="Plant" type="Area3D" parent="." node_paths=PackedStringArray("hit", "ShootPos")]
+collision_mask = 12
+script = ExtResource("1_f6whm")
+Bullet = ExtResource("2_p5tbp")
+pea = ExtResource("3_c74oe")
+hit = NodePath("RayCast3D")
+ShootPos = NodePath("Marker3D")
+
+[node name="RayCast3D" type="RayCast3D" parent="Plant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00113189, 0.537195, 0.0262175)
+target_position = Vector3(15, 0, 0)
+collision_mask = 5
+collide_with_areas = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plant"]
+shape = SubResource("CapsuleShape3D_5n6pp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Plant"]
+mesh = SubResource("CapsuleMesh_thipe")
+skeleton = NodePath("../..")
+
+[node name="Marker3D" type="Marker3D" parent="Plant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.670446, 0.241329, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 0.2, 0, 0, 0, 100, -0.117472, -1.02096, 0.134101)
+mesh = SubResource("BoxMesh_vm6ed")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("BoxShape3D_nkr75")
+
+[node name="RigidBody3D" parent="." instance=ExtResource("2_p5tbp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.69498, 3.46124, -0.0544381)
+
+[node name="RigidBody3D2" parent="." instance=ExtResource("2_p5tbp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.87046, 1.88849, 0.449954)
+
+[node name="RigidBody3D3" parent="." instance=ExtResource("2_p5tbp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.973897, 1.88849, -1.96434)
+
+[node name="RigidBody3D4" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18614, 1.79708, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D4"]
+shape = SubResource("BoxShape3D_dkdal")
+
+[node name="Zombie" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.72561, 0.644851, 0)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("3_bo8he")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie"]
+shape = SubResource("CapsuleShape3D_0dc5h")
+
+[node name="Pea" parent="." instance=ExtResource("3_c74oe")]
+
+[node name="GridSystem" type="Node3D" parent="."]
+script = ExtResource("5_cq0bd")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = SubResource("MeshLibrary_sq8cu")
+cell_size = Vector3(1, 1, 1)
+cell_octant_size = 1
