@@ -88,6 +88,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.72561, 0.644851, 0)
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("3_bo8he")
+speed = 0.01
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie"]
 shape = SubResource("CapsuleShape3D_0dc5h")
